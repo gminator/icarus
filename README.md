@@ -1,4 +1,4 @@
-# Icarus - Wordpress Health & Status Monitoring
+# Icarus - Health & Status 
 *Version 1.0.0*
 
 This plugin provides a lightweigh basic url that be used by various monitoring systems to determine
