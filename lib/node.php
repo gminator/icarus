@@ -6,11 +6,13 @@
  **/  
  class Node{
    
-   const ONLINE = "running";
-   const DOWN = "online";
+   const ONLINE = "online";
+   const DOWN = "offline";
+   const DEGRADED = "degraded";
    public $id;
    public $host;
    public $nic;
+   public $data;
    
    public function __construct($attributes)
    {
@@ -39,7 +41,11 @@
       
       $node =  Node::get($eth0); 
       if($node)
-      {return $node;}
+      {
+         $node->status = Node::ONLINE;
+         $node->save();
+         return $node;
+      }
       
       $node = new Node(array("host" => $hostame, "nic" => $eth0, "status" => Node::ONLINE));
       $node->save();
@@ -52,8 +58,10 @@
     **/
    public static function get($nic)
    {
-      $data =  get_page_by_title( $nic, ARRAY_A, strtolower(Icarus::POST_TYPE)); 
-      return new Node(array("id" => $data["ID"], "nic" => $data["post_title"], "host" => $data["post_content"], "status" => $data["post_status"]));
+      $data =  get_page_by_title( $nic, ARRAY_A, strtolower(Icarus::POST_TYPE));
+      if (empty($data))
+      {return null;}
+      return new Node(array("id" => $data["ID"], "nic" => $data["post_title"], "host" => $data["post_name"], "status" => $data["post_status"]));
    }
    /**
     * Node
@@ -62,12 +70,16 @@
     **/
    public function save()
    {
+      
       if ($this->id)
       {
-         wp_update_post( array("ID" => $this->id, "post_status" => $this->status,  "post_content" => $this->host) ); 
+         wp_update_post( array("ID" => $this->id, "post_status" => $this->status,  "post_name" => $this->host, "post_content" => $this->metadata()) );  
          return   1;
       }
-      return wp_insert_post( array("ID" => $this->id, "post_content" => $this->host, "post_title" => $this->nic, "post_status" => $this->status, "post_type" => Icarus::POST_TYPE), $wp_error );
+      
+      
+       wp_insert_post( array("ID" => $this->id, "post_name" => $this->host, "post_title" => $this->nic, "post_status" => $this->status, "post_type" => Icarus::POST_TYPE), $wp_error );
+         return 1;
    }
    
    public static function offline_nodes()
@@ -87,14 +99,44 @@
       $posts_array = get_posts($args);
       foreach($posts_array as $post)
       {
-         $nodes[] = new Node(array("id" => $post->ID, "nic" => $post->post_title, "host" => $post->post_content, "status" => $post->post_status));
+         $nodes[] = new Node(array("data" => json_decode($post->post_content, true),"id" => $post->ID, "nic" => $post->post_title, "host" => $post->post_name, "status" => $post->post_status));
       }
       return $nodes;
    }
    
    public function status()
    {
-      return ucwords($this->status);
+      if ($this->status != Node::ONLINE)
+      {return $this->status;}
+      
+      if ($this->ram() > 70)
+      {return Node::DEGRADED;}
+      
+      return  $this->status;
+   }
+   
+   public function metadata()
+   {
+      $free = shell_exec('free');
+      $free = (string)trim($free);
+      $free_arr = explode("\n", $free);
+      $mem = explode(" ", $free_arr[1]);
+      $mem = array_filter($mem);
+      $mem = array_merge($mem);
+      $memory_usage = $mem[2]/$mem[1]*100;
+      
+      $load = sys_getloadavg();
+      return json_encode(array("load" => $load[0], "memory" => $memory_usage));
+   }
+   
+   public function ram()
+   { 
+      return round($this->data["memory"],0);
+   }
+   
+   public function load()
+   { 
+      return $this->data["load"];
    }
  }
  

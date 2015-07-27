@@ -24,13 +24,17 @@
       <tr>
         <th>Host</th>
         <th>Interface</th>
+        <th>Ram</th>
+        <th>Load</th>
         <th>Status</th>
       </tr>
       <? foreach(Node::all() as $node) { ?>
       <tr>
         <td><?= $node->host ?></td>
         <td><?= $node->nic ?></td>
-        <td><span class="label label-success"><?= $node->status()?></span></td>
+        <td><?= $node->ram() ?>%</td>
+        <td><?= $node->load() ?></td>
+        <td><span class="label label-<?= $states[$node->status()]?>"><?= ucwords($node->status()) ?></span></td>
       </tr>
       <? } ?>
     </table>

@@ -16,7 +16,11 @@
          add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
          add_action( 'admin_init', array( $this, 'register_settings' ) );
          add_action( 'init', array( $this, 'register_post_types' ) );
-         
+         add_action( 'init', array( $this, 'register_nodes' ) );    
+    }
+    
+    public function register_nodes()
+    {
          Node::offline_nodes();
          Node::register_node();  
     }
@@ -58,6 +62,8 @@
      **/
     public function admins_settings_page()
     {
+      
+         $states = array(Node::ONLINE => "success", Node::DEGRADED => "warning");
       
         require_once ICARUS_PLUGIN_DIR . "/views/settings.html.php";
     }
