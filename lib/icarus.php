@@ -8,8 +8,8 @@
  * and pages and such 
  **/  
  class Icarus {
-   const POST_TYPE = "node";
-    
+    const POST_TYPE = "node";
+    const DEGRADED = "partialy running";
     public function __construct($action = null, $data = array())
     {
         
@@ -63,9 +63,12 @@
     public function admins_settings_page()
     {
       
-         $states = array(Node::ONLINE => "success", Node::DEGRADED => "warning");
+      $states = array(Node::ONLINE => "success", Node::DEGRADED => "warning", self::DEGRADED => "warning", Node::DOWN => "danger");
+      $node_states= $this->node_states();
+      $running = $node_states[Node::ONLINE] + $node_states[Node::DEGRADED];
+      $total = array_sum(array_values($node_states));
       
-        require_once ICARUS_PLUGIN_DIR . "/views/settings.html.php";
+      require_once ICARUS_PLUGIN_DIR . "/views/settings.html.php";
     }
     
     /**
@@ -85,10 +88,18 @@
     
     public function assert_health()
     {
-        if(!$this->assert_database_connection())
-        {return false;}
-        
-        return true;
+         $status  = $this->status();
+         
+         if($status == self::DEGRADED)
+         {throw new PartiallyRunningException("Some nodes are down");}
+         
+         if($status == Node::DEGRADED)
+         {throw new DegradedNodesException("Some nodes are down");}
+          
+         if(!$this->assert_database_connection())
+         {return false;}
+
+         return true;
     }
     
     /**
@@ -126,11 +137,39 @@
     
     
     
-    public function success()
-    { 
-        echo json_encode(array("status" => "running"));
+    public function success($status = 200, $message = "OK")
+    {
+         header($_SERVER["SERVER_PROTOCOL"]." $status $message"); 
+         header("Status: $status");
+         echo json_encode(array("status" => $this->status()));
+         exit;
+    }
+    
+    public function node_states()
+    {
+      $states = array();
+      foreach(Node::all() as $node)
+      {
+         $states[$node->status()] ++;
+      }
+      return $states;
+    }
+    public function status()
+    {
+      $states = $this->node_states();
+      $total = array_sum(array_values($states));
+      
+      if (count($states[Node::DOWN]))
+      {return self::DEGRADED;}
+      
+      if (count($states[Node::DEGRADED]))
+      {return Node::DEGRADED;}
+      
+      return Node::ONLINE;
     }
  }
  
- class UnableToEstablishDbConnection extends Exception {}
+class UnableToEstablishDbConnection extends Exception {}
+class PartiallyRunningException extends Exception {}
+class DegradedNodesException extends Exception {}
  

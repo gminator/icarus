@@ -17,9 +17,25 @@
   </div>
 </div>
 
-
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-3">
+    <h4>Clust Status</h4>
+    <table class="table table-bordered">
+      <tr>
+          <th>Status</th>
+          <td><span class="label label-<?= $states[$this->status()]?>"><?= ucwords($this->status()) ?></span></td>
+      </tr>
+      <tr>
+          <th>Nodes</th>
+          <td><?= $running ?>/<?= $total ?> Running</td>
+      </tr>
+    </table>
+        
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <h4>Node Status</h4>
     <table class="table table-bordered">
       <tr>
         <th>Host</th>

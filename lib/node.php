@@ -33,7 +33,7 @@
    public function register_node()
    {
       $hostame = `hostname`;
-      $interface = `ifconfig | grep -A 2 eth10`;
+      $interface = `ifconfig | grep -A 2 eth9`;
       preg_match("/([\d\.]{2,3}){4}/", $interface, $data);
       
       $eth0 = $data[0];

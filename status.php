@@ -22,12 +22,14 @@ $icarus = new Icarus();
 
 try{
     $icarus->assert_health();
-    
-} catch( UnableToEstablishDbConnection $e) {
-    
+
+} catch( DegradedNodesException $e) {
+    $icarus->success(202 , "Accepted");
+} catch( PartiallyRunningException $e) {
+    $icarus->success(206, "Partial Content");    
+} catch( UnableToEstablishDbConnection $e) { 
     $icarus->failed($e->getMessage());
-} catch(Exception $e) {
-    
+} catch(Exception $e) { 
     $icarus->failed("Unexpected " . get_class($e) . " error occured");
 } 
 $icarus->success();
