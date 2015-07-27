@@ -9,7 +9,9 @@ Author URI: RSAWEB <thedevs@rsaweb.co.za>
 */
 define('ICARUS_PLUGIN_DIR', plugin_dir_path( __FILE__ ));
 
-require_once "lib/icarus.php";
+require_once "vendor/autoload.php";
 
+require_once "lib/icarus.php";
+require_once "lib/node.php";
 
 new Icarus();

@@ -8,14 +8,32 @@
  * and pages and such 
  **/  
  class Icarus {
+   const POST_TYPE = "node";
     
     public function __construct($action = null, $data = array())
     {
         
-        add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
-        add_action( 'admin_init', array( $this, 'register_settings' ) );  
+         add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
+         add_action( 'admin_init', array( $this, 'register_settings' ) );
+         add_action( 'init', array( $this, 'register_post_types' ) );
+         
+         Node::offline_nodes();
+         Node::register_node();  
     }
     
+    public function register_post_types()
+    { 
+       register_post_type( 'acme_product',
+         array(
+           'labels' => array(
+             'name' => __( 'Node' ),
+             'singular_name' => __( 'Node' )
+           ),
+           'public' => false,
+           'has_archive' => true,
+         )
+       );
+    }
     public function register_admin_menu(){ 
         add_options_page( 'Icarus','Icarus','manage_options','icarus.php', array( $this, 'admins_settings_page' ) ); 
     }
@@ -39,7 +57,8 @@
      *
      **/
     public function admins_settings_page()
-    { 
+    {
+      
         require_once ICARUS_PLUGIN_DIR . "/views/settings.html.php";
     }
     
