@@ -9,6 +9,8 @@
    const ONLINE = "online";
    const DOWN = "offline";
    const DEGRADED = "degraded";
+   const STALE = "stale";
+   
    public $id;
    public $host;
    public $nic;
@@ -33,10 +35,10 @@
    public function register_node()
    {
       $hostame = `hostname`;
-      $interface = `ifconfig | grep -A 2 eth9`;
-      preg_match("/([\d\.]{2,3}){4}/", $interface, $data);
+      $interface = `ifconfig | grep -A 2 eth`;
+      preg_match_all("/addr:(([\d\.]{2,3}){4})/", $interface, $data);
       
-      $eth0 = $data[0];
+      $eth0 = join("::", $data[1]);
       
       
       $node =  Node::get($eth0); 
@@ -98,14 +100,28 @@
       $args = array( 'post_type' => Icarus::POST_TYPE, 'post_status' => Node::ONLINE );
       $posts_array = get_posts($args);
       foreach($posts_array as $post)
-      {
-         $nodes[] = new Node(array("data" => json_decode($post->post_content, true),"id" => $post->ID, "nic" => $post->post_title, "host" => $post->post_name, "status" => $post->post_status));
+      { 
+         $nodes[] = new Node(array("last_update" => $post->post_modified, "data" => json_decode($post->post_content, true),"id" => $post->ID, "nic" => $post->post_title, "host" => $post->post_name, "status" => $post->post_status));
       }
       return $nodes;
    }
    
+   public function last_update()
+   {
+       return current_time('timestamp') - strtotime($this->last_update);
+   }
    public function status()
    {
+      $last_update = $this->last_update();
+      $settings = Icarus::retrieve_settings();
+      
+      if($last_update > $settings["down_timeout"])
+      {return Node::DOWN;}
+      
+      if($last_update > $settings["stale_timeout"])
+      {return Node::STALE;}
+      
+      
       if ($this->status != Node::ONLINE)
       {return $this->status;}
       

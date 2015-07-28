@@ -10,9 +10,8 @@
  class Icarus {
     const POST_TYPE = "node";
     const DEGRADED = "partialy running";
-    public function __construct($action = null, $data = array())
-    {
-        
+    public function __construct()
+    { 
          add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
          add_action( 'admin_init', array( $this, 'register_settings' ) );
          add_action( 'init', array( $this, 'register_post_types' ) );
@@ -21,7 +20,7 @@
     
     public function register_nodes()
     {
-         Node::offline_nodes();
+         #Node::offline_nodes();
          Node::register_node();  
     }
     
@@ -49,8 +48,12 @@
      * settings for this plugin 
      **/
     public function register_settings(){
-        register_setting('icarus_settings', 'nodes', array($this, "validate_empty"));
-        register_setting('icarus_settings', 'rewrites', array($this, "validate_empty")); 
+        #register_setting('icarus_settings', 'nodes', array($this, "validate_empty"));
+        #register_setting('icarus_settings', 'rewrites', array($this, "validate_empty"));
+        register_setting('icarus_settings', 'stale_timeout'); 
+        register_setting('icarus_settings', 'down_timeout');  
+        register_setting('icarus_settings', 'alert_email');
+        
     }
     
     /**
@@ -63,11 +66,12 @@
     public function admins_settings_page()
     {
       
-      $states = array(Node::ONLINE => "success", Node::DEGRADED => "warning", self::DEGRADED => "warning", Node::DOWN => "danger");
+      $states = array(Node::ONLINE => "success", Node::DEGRADED => "warning", self::DEGRADED => "warning", Node::DOWN => "danger", Node::STALE => "default");
       $node_states= $this->node_states();
       $running = $node_states[Node::ONLINE] + $node_states[Node::DEGRADED];
       $total = array_sum(array_values($node_states));
-      
+      $options = $this->retrieve_settings();
+       
       require_once ICARUS_PLUGIN_DIR . "/views/settings.html.php";
     }
     
@@ -166,6 +170,24 @@
       {return Node::DEGRADED;}
       
       return Node::ONLINE;
+    }
+    
+     /**
+     * Admin Settings
+     *
+     * Retrieve settings page from views
+     *
+     * @param void
+     * @return void
+     **/
+    public function retrieve_settings()
+    { 
+            $settings = array(
+              "alert_email" => get_option('alert_email'),
+              "stale_timeout" => get_option('stale_timeout', 10),
+              "down_timeout" => get_option('down_timeout', 60)
+            );
+            return $settings;
     }
  }
  
