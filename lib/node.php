@@ -125,7 +125,8 @@
       if ($this->status != Node::ONLINE)
       {return $this->status;}
       
-      if ($this->ram() > 70)
+      
+      if ($this->ram() > $settings['mem_limit'] || $this->load() > $settings['load_limit'])
       {return Node::DEGRADED;}
       
       return  $this->status;

@@ -53,6 +53,8 @@
         register_setting('icarus_settings', 'stale_timeout'); 
         register_setting('icarus_settings', 'down_timeout');  
         register_setting('icarus_settings', 'alert_email');
+        register_setting('icarus_settings', 'mem_limit');
+        register_setting('icarus_settings', 'load_limit');
         
     }
     
@@ -185,7 +187,9 @@
             $settings = array(
               "alert_email" => get_option('alert_email'),
               "stale_timeout" => get_option('stale_timeout', 10),
-              "down_timeout" => get_option('down_timeout', 60)
+              "down_timeout" => get_option('down_timeout', 60),
+              "mem_limit" => get_option('mem_limit', 60),
+              "load_limit" => get_option('load_limit', 1.5),
             );
             return $settings;
     }

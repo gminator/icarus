@@ -7,6 +7,8 @@
       <?php do_settings_sections( 'icarus_settings' ); ?>
       <input type="hidden" value="<?php echo $options['down_timeout'] ?>" name="down_timeout" >
       <input type="hidden" value="<?php echo $options['stale_timeout'] ?>" name="stale_timeout" >
+      <input type="hidden" value="<?php echo $options['mem_limit'] ?>" name="mem_limit" >
+      <input type="hidden" value="<?php echo $options['load_limit'] ?>" name="load_limit" >
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-4 control-label">Email Address</label>
         <div class="col-sm-8">

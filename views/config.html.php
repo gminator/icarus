@@ -26,6 +26,29 @@
           <input type="text" class="form-control" placeholder="Nodes need to phone home before registering as offline" value="<?php echo $options['down_timeout'] ?>" name="down_timeout">
         </div>
       </div>
+      
+         
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-4 control-label">Memory Limit</label>
+        <div class="col-sm-8">
+          <input type="text"
+                 class="form-control"
+                 placeholder="Memory limit percentage"
+                 value="<?php echo $options['mem_limit'] ?>"
+                 name="mem_limit" >
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-4 control-label">Load Limit</label>
+        <div class="col-sm-8">
+          <input type="text"
+                 class="form-control"
+                 placeholder="Server load limit"
+                 value="<?php echo $options['load_limit'] ?>"
+                 name="load_limit" >
+        </div>
+      </div>
       <?php submit_button(); ?>
     </form>
   </div>
