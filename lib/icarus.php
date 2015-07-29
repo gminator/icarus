@@ -10,6 +10,7 @@
  class Icarus {
     const POST_TYPE = "node";
     const DEGRADED = "partialy running";
+    const INCONSISTENT = "inconsistent ";
     public function __construct()
     { 
          add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
@@ -50,11 +51,18 @@
     public function register_settings(){
         #register_setting('icarus_settings', 'nodes', array($this, "validate_empty"));
         #register_setting('icarus_settings', 'rewrites', array($this, "validate_empty"));
+        register_setting('icarus_settings_alerts', 'alert_email');
+        
         register_setting('icarus_settings', 'stale_timeout'); 
-        register_setting('icarus_settings', 'down_timeout');  
-        register_setting('icarus_settings', 'alert_email');
+        register_setting('icarus_settings', 'down_timeout');   
         register_setting('icarus_settings', 'mem_limit');
         register_setting('icarus_settings', 'load_limit');
+        
+        register_setting('icarus_settings_load_balancer', 'loadalanced');
+        register_setting('icarus_settings_load_balancer', 'loadbalancer');
+        register_setting('icarus_settings_load_balancer', 'probe_enabled');
+        register_setting('icarus_settings_load_balancer', 'nodes');
+        
         
     }
     
@@ -68,7 +76,7 @@
     public function admins_settings_page()
     {
       
-      $states = array(Node::ONLINE => "success", Node::DEGRADED => "warning", self::DEGRADED => "warning", Node::DOWN => "danger", Node::STALE => "default");
+      $states = array(Node::ONLINE => "success", Node::DEGRADED => "warning", self::DEGRADED => "warning", Node::DOWN => "danger", Node::STALE => "default", self::INCONSISTENT => "danger");
       $node_states= $this->node_states();
       $running = $node_states[Node::ONLINE] + $node_states[Node::DEGRADED];
       $total = array_sum(array_values($node_states));
@@ -162,11 +170,21 @@
     }
     public function status()
     {
+      $settings = $this->retrieve_settings();
       $states = $this->node_states();
       $total = array_sum(array_values($states));
       
+      if ($total < $settings["nodes"])
+      { return self::INCONSISTENT; }
+      
       if (count($states[Node::DOWN]))
-      {return self::DEGRADED;}
+      {
+         if (count($states[Node::DOWN]) == $total)
+         {return Node::DOWN;}
+         
+         return self::DEGRADED;
+      }
+      
       
       if (count($states[Node::DEGRADED]))
       {return Node::DEGRADED;}
@@ -183,9 +201,17 @@
      * @return void
      **/
     public function retrieve_settings()
-    { 
+    {
+      
+        
             $settings = array(
               "alert_email" => get_option('alert_email'),
+              
+              "loadalanced" => get_option('loadalanced'),
+              "loadbalancer" => get_option('loadbalancer'),
+              "probe_enabled" => get_option('probe_enabled'),
+              "nodes" => get_option('nodes'),
+              
               "stale_timeout" => get_option('stale_timeout', 10),
               "down_timeout" => get_option('down_timeout', 60),
               "mem_limit" => get_option('mem_limit', 60),

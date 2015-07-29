@@ -19,10 +19,12 @@ require_once "lib/icarus.php";
 
 //By now we can assume that core has been loaded
 $icarus = new Icarus();
+$node = Node::register_node();
+$node->status = Node::ONLINE;
+$node->save();
 
 try{
-    $icarus->assert_health();
-
+    $icarus->assert_health(); 
 } catch( DegradedNodesException $e) {
     $icarus->success(202 , "Accepted");
 } catch( PartiallyRunningException $e) {

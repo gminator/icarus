@@ -38,14 +38,19 @@
       $interface = `ifconfig | grep -A 2 eth`;
       preg_match_all("/addr:(([\d\.]{2,3}){4})/", $interface, $data);
       
-      $eth0 = join("::", $data[1]);
+      $eth0 = join(":::", $data[1]);
       
       
-      $node =  Node::get($eth0); 
-      if($node)
+      $node =  Node::get($eth0);
+      $settings = Icarus::retrieve_settings();
+      //Register nodes on page load if probing is not enabled
+      if($node )
       {
-         $node->status = Node::ONLINE;
-         $node->save();
+         if(!$settings['probe_enabled'])
+         {
+            $node->status = Node::ONLINE;
+            $node->save();
+         }
          return $node;
       }
       
@@ -72,7 +77,6 @@
     **/
    public function save()
    {
-      
       if ($this->id)
       {
          wp_update_post( array("ID" => $this->id, "post_status" => $this->status,  "post_name" => $this->host, "post_content" => $this->metadata()) );  

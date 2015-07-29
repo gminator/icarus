@@ -6,8 +6,7 @@
       
       <?php settings_fields( 'icarus_settings' ); ?> 
       <?php do_settings_sections( 'icarus_settings' ); ?>
-      <input type="hidden" value="<?php echo $options['alert_email'] ?>" name="alert_email" >
-        
+      
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-4 control-label">Stale Timeout</label>
         <div class="col-sm-8">

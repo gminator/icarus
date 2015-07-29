@@ -3,12 +3,8 @@
     <p> Downtime alerts will be sent to this notification settings. </p>
     <form method="post" action="options.php" class="form-horizontal"> 
       
-      <?php settings_fields( 'icarus_settings' ); ?> 
-      <?php do_settings_sections( 'icarus_settings' ); ?>
-      <input type="hidden" value="<?php echo $options['down_timeout'] ?>" name="down_timeout" >
-      <input type="hidden" value="<?php echo $options['stale_timeout'] ?>" name="stale_timeout" >
-      <input type="hidden" value="<?php echo $options['mem_limit'] ?>" name="mem_limit" >
-      <input type="hidden" value="<?php echo $options['load_limit'] ?>" name="load_limit" >
+      <?php settings_fields( 'icarus_settings_alerts' ); ?> 
+      <?php do_settings_sections( 'icarus_settings_alerts' ); ?>
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-4 control-label">Email Address</label>
         <div class="col-sm-8">
