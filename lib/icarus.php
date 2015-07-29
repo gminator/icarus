@@ -164,8 +164,6 @@
     
     public function success($status = 200, $message = "OK")
     {
-         header($_SERVER["SERVER_PROTOCOL"]." $status $message"); 
-         header("Status: $status");
          echo json_encode(array("status" => $this->status()));
          exit;
     }

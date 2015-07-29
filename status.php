@@ -22,17 +22,5 @@ $icarus = new Icarus();
 $node = Node::register_node();
 $node->status = Node::ONLINE;
 $node->save();
-
-try{
-    $icarus->assert_health(); 
-} catch( DegradedNodesException $e) {
-    $icarus->success(200 , "Accepted");
-} catch( PartiallyRunningException $e) {
-    $icarus->success(200, "Partial Content");    
-} catch( UnableToEstablishDbConnection $e) { 
-    $icarus->failed($e->getMessage());
-} catch(Exception $e) { 
-    $icarus->failed("Unexpected " . get_class($e) . " error occured");
-} 
+$icarus->assert_health();
 $icarus->success();
-
