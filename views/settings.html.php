@@ -14,7 +14,7 @@
 
 <div class="row">
   <div class="col-md-8">
-    <h1><span class="glyphicon glyphicon-plus-sign"></span>Icurus Monitoring</h1>
+    <h1><span class="glyphicon glyphicon-plus-sign"></span>Icarus Monitoring</h1>
     <h5>Health and Availability Monitoring for load balanced instances of wordpress</h5>
     <br/><br/>
     <!-- Nav tabs -->
