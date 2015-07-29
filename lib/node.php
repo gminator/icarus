@@ -38,7 +38,7 @@
       $interface = `ifconfig | grep -A 2 eth`;
       preg_match_all("/addr:(([\d\.]{2,3}){4})/", $interface, $data);
       
-      $eth0 = join(":::", $data[1]);
+      $eth0 = join("::", $data[1]);
       
       
       $node =  Node::get($eth0);
@@ -159,5 +159,7 @@
    { 
       return $this->data["load"];
    }
+   
+   
  }
  

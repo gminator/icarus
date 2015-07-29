@@ -26,7 +26,18 @@
     }
     
     public function register_post_types()
-    { 
+    {
+      register_post_type( 'icarus_incidents',
+         array(
+           'labels' => array(
+             'name' => __( 'incidents' ),
+             'singular_name' => __( 'incidents' )
+           ),
+           'public' => false,
+           'has_archive' => true,
+         )
+       );
+      
        register_post_type( 'acme_product',
          array(
            'labels' => array(
@@ -39,7 +50,7 @@
        );
     }
     public function register_admin_menu(){ 
-        add_options_page( 'Icarus','Icarus','manage_options','icarus.php', array( $this, 'admins_settings_page' ) ); 
+        add_options_page( 'Icarus Monitoring','Icarus Monitoring','manage_options','icarus.php', array( $this, 'admins_settings_page' ) ); 
     }
     
     /**

@@ -13,5 +13,5 @@ require_once "vendor/autoload.php";
 
 require_once "lib/icarus.php";
 require_once "lib/node.php";
-
+require_once "lib/incidents.php";
 new Icarus();
