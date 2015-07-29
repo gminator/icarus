@@ -170,6 +170,7 @@
     }
     public function status()
     {
+      
       $settings = $this->retrieve_settings();
       $states = $this->node_states();
       $total = array_sum(array_values($states));
@@ -177,9 +178,10 @@
       if ($total < $settings["nodes"])
       { return self::INCONSISTENT; }
       
-      if (count($states[Node::DOWN]))
+      if ($states[Node::DOWN])
       {
-         if (count($states[Node::DOWN]) == $total)
+         
+         if ($states[Node::DOWN] == $total)
          {return Node::DOWN;}
          
          return self::DEGRADED;
