@@ -26,9 +26,9 @@ $node->save();
 try{
     $icarus->assert_health(); 
 } catch( DegradedNodesException $e) {
-    $icarus->success(202 , "Accepted");
+    $icarus->success(200 , "Accepted");
 } catch( PartiallyRunningException $e) {
-    $icarus->success(206, "Partial Content");    
+    $icarus->success(200, "Partial Content");    
 } catch( UnableToEstablishDbConnection $e) { 
     $icarus->failed($e->getMessage());
 } catch(Exception $e) { 
