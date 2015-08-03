@@ -64,6 +64,9 @@
         #register_setting('icarus_settings', 'rewrites', array($this, "validate_empty"));
         register_setting('icarus_settings_alerts', 'alert_email');
         
+        
+        
+        register_setting('icarus_settings', 'iface');
         register_setting('icarus_settings', 'stale_timeout'); 
         register_setting('icarus_settings', 'down_timeout');   
         register_setting('icarus_settings', 'mem_limit');
@@ -84,7 +87,7 @@
      * dashboard admin panel
      *
      **/
-    public function admins_settings_page()
+    public function admins_settings_page($template)
     {
       
       $states = array(Node::ONLINE => "success", Node::DEGRADED => "warning", self::DEGRADED => "warning", Node::DOWN => "danger", Node::STALE => "default", self::INCONSISTENT => "danger");
@@ -92,8 +95,11 @@
       $running = $node_states[Node::ONLINE] + $node_states[Node::DEGRADED];
       $total = array_sum(array_values($node_states));
       $options = $this->retrieve_settings();
-       
-      require_once ICARUS_PLUGIN_DIR . "/views/settings.html.php";
+      
+      if(empty($template))
+      {$template="/views/settings.html.php";}
+      
+      require_once ICARUS_PLUGIN_DIR . $template;
     }
     
     /**
@@ -105,9 +111,9 @@
      * @param void
      * @return string
      **/
-    public function status_uri()
+    public function status_uri($file = "status.php")
     {     
-        return plugins_url("status.php", ICARUS_PLUGIN_DIR ."/icarus.php");
+        return plugins_url($file, ICARUS_PLUGIN_DIR ."/icarus.php");
     }
     
     
@@ -216,6 +222,8 @@
       
         
             $settings = array(
+               
+              "iface" => get_option('iface'),
               "alert_email" => get_option('alert_email'),
               
               "loadalanced" => get_option('loadalanced'),

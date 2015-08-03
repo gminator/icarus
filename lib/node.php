@@ -34,8 +34,10 @@
     **/ 
    public function register_node()
    {
+      $settings = Icarus::retrieve_settings();
       $hostame = `hostname`;
-      $interface = `ifconfig | grep -A 2 eth`;
+      
+      $interface = `ifconfig | grep -A 2 {$settings["iface"]}`;
       preg_match_all("/addr:(([\d\.]{2,3}){4})/", $interface, $data);
       
       $eth0 = join("::", $data[1]);
@@ -84,7 +86,7 @@
       }
       
       
-       wp_insert_post( array("ID" => $this->id, "post_name" => $this->host, "post_title" => $this->nic, "post_status" => $this->status, "post_type" => Icarus::POST_TYPE), $wp_error );
+       wp_insert_post( array("post_content" => $this->metadata(), "ID" => $this->id, "post_name" => $this->host, "post_title" => $this->nic, "post_status" => $this->status, "post_type" => Icarus::POST_TYPE), $wp_error );
          return 1;
    }
    
@@ -147,6 +149,7 @@
       $memory_usage = $mem[2]/$mem[1]*100;
       
       $load = sys_getloadavg();
+      
       return json_encode(array("load" => $load[0], "memory" => $memory_usage));
    }
    

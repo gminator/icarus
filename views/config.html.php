@@ -6,7 +6,18 @@
       
       <?php settings_fields( 'icarus_settings' ); ?> 
       <?php do_settings_sections( 'icarus_settings' ); ?>
-      
+
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-4 control-label">Network Prefix</label>
+        <div class="col-sm-8">
+          <input type="text"
+                 class="form-control"
+                 placeholder="ie. eth"
+                 value="<?php echo $options['iface'] ?>"
+                 name="iface" >
+        </div>
+      </div>
+      <hr>
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-4 control-label">Stale Timeout</label>
         <div class="col-sm-8">

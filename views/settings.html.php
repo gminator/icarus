@@ -6,6 +6,10 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+ <script src="<?= $this->status_uri("js/default.js")?>"></script>
+
+
 <style>
   .tab-pane  {padding-top: 20px;padding-bottom: 20px;}
   h1 .glyphicon, .nav-tabs .glyphicon {margin-right: 5px;}
@@ -13,9 +17,28 @@
 </style>
 
 <div class="row">
+  
   <div class="col-md-8">
-    <h1><span class="glyphicon glyphicon-plus-sign"></span>Icarus Monitoring</h1>
-    <h5>Health and Availability Monitoring for load balanced instances of wordpress</h5>
+        
+    <div class="row">
+      <div class="col-md-10">
+        <h1><span class="glyphicon glyphicon-plus-sign"></span>Icarus Monitoring</h1>
+        <h5>Health and Availability Monitoring for load balanced instances of wordpress</h5> 
+      </div>
+      <div class="col-md-2">
+            <div class="btn-group">
+              <button class="btn btn-primary"><span class="glyphicon glyphicon-th-list"></span> &nbsp;Menu</button>
+              <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a  id="reset" href="<?= $this->status_uri("reset.php")?>"><span class="glyphicon glyphicon-refresh"></span> &nbsp;Rest nodes</a>  
+                </li>
+              </ul>
+            </div>
+        </div>
+    </div>  
     <br/><br/>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">

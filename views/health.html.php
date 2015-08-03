@@ -1,8 +1,11 @@
-<p>
- <strong>Browse to:</strong> <a href="<?= $this->status_uri() ?>" ><?= $this->status_uri() ?></a>
-</p>
 
-
+<div class="row"> 
+  <div class="col-md-10">
+      <p>
+        <strong>Browse to:</strong> <a href="<?= $this->status_uri() ?>" ><?= $this->status_uri() ?></a>
+       </p>
+  </div>
+</div>
 <div class="row">
   
   <div class="col-md-9">
