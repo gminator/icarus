@@ -13,6 +13,7 @@
 <style>
   .tab-pane  {padding-top: 20px;padding-bottom: 20px;}
   h1 .glyphicon, .nav-tabs .glyphicon {margin-right: 5px;}
+  .menu-btn {margin-top: 20px;}
   
 </style>
 
@@ -26,7 +27,7 @@
         <h5>Health and Availability Monitoring for load balanced instances of wordpress</h5> 
       </div>
       <div class="col-md-2">
-            <div class="btn-group">
+            <div class="btn-group menu-btn">
               <button class="btn btn-primary"><span class="glyphicon glyphicon-th-list"></span> &nbsp;Menu</button>
               <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
