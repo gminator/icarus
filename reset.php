@@ -13,7 +13,9 @@
  **/
 define('WP_USE_THEMES', false);
 global $wp, $wp_query, $wp_the_query, $wp_rewrite, $wp_did_header;
-define("BASE_PATH", preg_replace("/wp-content.*/", "", __FILE__)); 
+
+define("BASE_PATH", $_SERVER["DOCUMENT_ROOT"] . "/"); 
+
 require(BASE_PATH . 'wp-load.php');
 require_once "lib/icarus.php";
 
