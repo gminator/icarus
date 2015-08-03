@@ -38,7 +38,7 @@
       $hostame = `hostname`;
       $ifaces = $settings["iface"];
       $interface = `ifconfig | grep -A 2 {$ifaces}`;
-      var_dump("ifconfig | grep -A 2 {$ifaces}", system("ifconfig | grep -A 2 {$ifaces}"),$interface);
+      var_dump("ifconfig | grep -A 2 {$ifaces}", system("ifconfig | grep -A 2 venet"),$interface);
       preg_match_all("/addr:(([\d\.]{2,3}){4})/", $interface, $data);
       
       $eth0 = join("::", $data[1]);
