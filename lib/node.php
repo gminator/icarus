@@ -36,8 +36,8 @@
    {
       $settings = Icarus::retrieve_settings();
       $hostame = `hostname`;
-      
-      $interface = `ifconfig | grep -A 2 {$settings["iface"]}`;
+      $ifaces = $settings["iface"];
+      $interface = `ifconfig | grep -A 2 {$ifaces}`;
       preg_match_all("/addr:(([\d\.]{2,3}){4})/", $interface, $data);
       
       $eth0 = join("::", $data[1]);
