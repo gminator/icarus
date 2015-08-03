@@ -39,13 +39,13 @@
       $ifaces = $settings["iface"];
       $interface = `ifconfig | grep -A 2 {$ifaces}`;
       $data[] = $_SERVER["SERVER_ADDR"];
-      var_dump($data);
+      
       if($interface)
       {preg_match_all("/addr:(([\d\.]{2,3}){4})/", $interface, $data);}
-      var_dump($data);
+      
       $eth0 = join("::", $data[1]);
       
-      
+      var_dump($eth0);
       $node =  Node::get($eth0);
       $settings = Icarus::retrieve_settings();
       //Register nodes on page load if probing is not enabled
