@@ -11,6 +11,7 @@
  * It will attempt to retrieve on settings record from the database, if this does not return a result, the you will receive status 500
  * 
  **/
+
 define('WP_USE_THEMES', false);
 global $wp, $wp_query, $wp_the_query, $wp_rewrite, $wp_did_header;
 
